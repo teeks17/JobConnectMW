@@ -1,9 +1,32 @@
 import { Image, StyleSheet, Platform } from 'react-native';
-
+import * as React from 'react';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { initializeApp } from "firebase/app";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBb07IEfH-KXrp8heF66roiLdcRokAQ12s",
+  authDomain: "job-connect-mw.firebaseapp.com",
+  projectId: "job-connect-mw",
+  storageBucket: "job-connect-mw.appspot.com",
+  messagingSenderId: "779627175856",
+  appId: "1:779627175856:web:cd020b35e026c3c2e20075",
+  measurementId: "G-1EDN2EFM2P"
+};
+
+
+
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 
 export default function HomeScreen() {
   return (
