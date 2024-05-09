@@ -1,17 +1,15 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-import * as React from 'react';
+
+// import * as React from 'react';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
+import React from 'react';
+import { Image, StyleSheet, Platform, Button } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { initializeApp } from "firebase/app";
-import firestore from '@react-native-firebase/firestore';
+import firestore from '@firebase/firestore';
+import { getFirestore, collection, addDoc, getDoc } from "firebase/firestore";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBb07IEfH-KXrp8heF66roiLdcRokAQ12s",
   authDomain: "job-connect-mw.firebaseapp.com",
@@ -22,11 +20,57 @@ const firebaseConfig = {
   measurementId: "G-1EDN2EFM2P"
 };
 
-
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Define the function to create and store an object in Firestore
+const createAndStoreObject = async () => {
+  try {
+    // Create a sample object
+    const sampleObject = {
+      title: 'Sample Job',
+      description: 'This is a sample job description.',
+    };
+
+    // Store the sample object in Firestore
+    const docRef = await addDoc(collection(db, 'jobs'), sampleObject);
+    console.log('Document written with ID:', docRef.id);
+    
+    // Retrieve the stored object from Firestore
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.exists()) {
+      const retrievedObject = docSnapshot.data();
+      console.log('Retrieved object:', retrievedObject);
+    } else {
+      console.log('No such document!');
+    }
+  } catch (error) {
+    console.error('Error creating/storing/retrieving object:', error);
+  }
+};
+
+const HomeScreen = () => {
+  const handleButtonPress = () => {
+    createAndStoreObject();
+  };
+
+  return (
+    <ThemedView style={styles.container}>
+      <Button title="Run Test" onPress={handleButtonPress} />
+    </ThemedView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default HomeScreen;
 
 
 // export default function HomeScreen() {
@@ -92,56 +136,3 @@ const app = initializeApp(firebaseConfig);
 //     position: 'absolute',
 //   },
 // });
-
-
-
-const HomeScreen = () => {
-  useEffect(() => {
-    // Test: Create and store an object in Firestore
-    const createAndStoreObject = async () => {
-      try {
-        // Create a sample object
-        const sampleObject = {
-          title: 'Sample Job',
-          description: 'This is a sample job description.',
-        };
-
-        // Store the sample object in Firestore
-        const docRef = await firestore().collection('jobs').add(sampleObject);
-        console.log('Document written with ID:', docRef.id);
-        
-        // Retrieve the stored object from Firestore
-        const docSnapshot = await docRef.get();
-        if (docSnapshot.exists) {
-          const retrievedObject = docSnapshot.data();
-          console.log('Retrieved object:', retrievedObject);
-        } else {
-          console.log('No such document!');
-        }
-      } catch (error) {
-        console.error('Error creating/storing/retrieving object:', error);
-      }
-    };
-
-    // Call the function to create and store the object when the component mounts
-    createAndStoreObject();
-  }, []); // Empty dependency array to run the effect only once when the component mounts
-
-  return (
-    <ThemedView style={styles.container}>
-      {/* Your existing UI components */}
-      {/* For example, you can add a button to trigger the test */}
-      <Button title="Run Test" onPress={createAndStoreObject} />
-    </ThemedView>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default HomeScreen;
