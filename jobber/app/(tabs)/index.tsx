@@ -1,76 +1,35 @@
+import React from 'react';
+import { View, Text } from 'react-native';
+import { initializeDatabase } from './database';
+import JobCreationScreen from './JobCreationScreen';
+import JobListingScreen from './JobListingScreen';
+
+initializeDatabase();
+
+export default function App() {
+  return (
+    <View>
+      <Text>Job Poster</Text>
+      <JobCreationScreen />
+      {/* <Text>Job Listing</Text>
+      <JobListingScreen /> */}
+    </View>
+  );
+}
+
+
+
+
+
 
 // import * as React from 'react';
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import React from 'react';
-import { Image, StyleSheet, Platform, Button } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
-import { initializeApp } from "firebase/app";
-import firestore from '@firebase/firestore';
-import { getFirestore, collection, addDoc, getDoc } from "firebase/firestore";
+// import { HelloWave } from '@/components/HelloWave';
+// import ParallaxScrollView from '@/components/ParallaxScrollView';
+// import { ThemedText } from '@/components/ThemedText';
+// import React from 'react';
+// import { Image, StyleSheet, Platform } from 'react-native';
+// import { ThemedView } from '@/components/ThemedView';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBb07IEfH-KXrp8heF66roiLdcRokAQ12s",
-  authDomain: "job-connect-mw.firebaseapp.com",
-  projectId: "job-connect-mw",
-  storageBucket: "job-connect-mw.appspot.com",
-  messagingSenderId: "779627175856",
-  appId: "1:779627175856:web:cd020b35e026c3c2e20075",
-  measurementId: "G-1EDN2EFM2P"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Define the function to create and store an object in Firestore
-const createAndStoreObject = async () => {
-  try {
-    // Create a sample object
-    const sampleObject = {
-      title: 'Sample Job',
-      description: 'This is a sample job description.',
-    };
-
-    // Store the sample object in Firestore
-    const docRef = await addDoc(collection(db, 'jobs'), sampleObject);
-    console.log('Document written with ID:', docRef.id);
-    
-    // Retrieve the stored object from Firestore
-    const docSnapshot = await getDoc(docRef);
-    if (docSnapshot.exists()) {
-      const retrievedObject = docSnapshot.data();
-      console.log('Retrieved object:', retrievedObject);
-    } else {
-      console.log('No such document!');
-    }
-  } catch (error) {
-    console.error('Error creating/storing/retrieving object:', error);
-  }
-};
-
-const HomeScreen = () => {
-  const handleButtonPress = () => {
-    createAndStoreObject();
-  };
-
-  return (
-    <ThemedView style={styles.container}>
-      <Button title="Run Test" onPress={handleButtonPress} />
-    </ThemedView>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default HomeScreen;
 
 
 // export default function HomeScreen() {
